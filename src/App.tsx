@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@emotion/react"
 import { CssBaseline } from "@mui/material"
 import { createTheme } from "@mui/material/styles"
-import BodegaRouter from "./pages/Router"
+import Products from "./pages/Products"
 
 const theme = createTheme()
 
@@ -11,7 +11,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="App" style={{marginTop:'1rem'}}>      
-        <BodegaRouter/>
+        <Products/>
       </div>
     </ThemeProvider>      
   )
