@@ -6,8 +6,8 @@ export class GestionBodegaDB extends Dexie{
 
     constructor(){
         super('GestionBodegaDB')
-        this.version(3).stores({
-            productos: '++id'
+        this.version(4).stores({
+            productos: '++id, nombre'
         })
     }
 }
