@@ -25,19 +25,21 @@ const ProductForm = ({
     onClose,
 }:ProductFormProps) => {
 
-    const defState = {
+    const defFormState = {
         nombre: '',
         precioMayor: 0,
         precioUnitario: 0,
         cantidadPorPaca: 0
     }
 
-    const [form,setForm] = useState<ProductCore>({...defState})
-    const [snackbarData, setSnackbarData] = useState<{message:string,isOpen:boolean,severity:AlertColor | undefined}>({
+    const defSnackbarState = {
         message:'',
         isOpen:false,
         severity:undefined
-    })
+    }
+
+    const [form,setForm] = useState<ProductCore>({...defFormState})
+    const [snackbarData, setSnackbarData] = useState<{message:string,isOpen:boolean,severity:AlertColor | undefined}>({...defSnackbarState})
 
     const onInputChange = ({target:{value,name}}: ChangeEvent<HTMLInputElement>) => {
         if(name === 'nombre'){
@@ -101,7 +103,7 @@ const ProductForm = ({
 
     const handleClose = () => {
         onClose()
-        setForm({...defState})
+        setForm({...defFormState})
     }
 
   return (
@@ -116,7 +118,7 @@ const ProductForm = ({
                 <Button type="submit" variant="contained">Registrar producto</Button>
             </form>
         </Dialog>
-        <Snackbar open={snackbarData.isOpen} autoHideDuration={6000}>
+        <Snackbar open={snackbarData.isOpen} onClose={()=>setSnackbarData({...defSnackbarState})} autoHideDuration={6000}>
             <Alert severity={snackbarData.severity} sx={{ width: '100%' }}>
                 {snackbarData.message}
             </Alert>

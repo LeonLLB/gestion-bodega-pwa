@@ -1,4 +1,4 @@
-import { Button, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import { Button, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import { useLiveQuery } from "dexie-react-hooks"
 import { useEffect, useState } from "react"
 import { db } from "../database/db"
@@ -14,9 +14,7 @@ const Products = () => {
 
     const navigate = useNavigate()
 
-    const clearQuery = () => setQuery('')
-
-    const productos = useLiveQuery(() =>  query !== '' ? db.productos.where('nombre').anyOf(query).toArray() : db.productos.toArray()        )
+    const productos = useLiveQuery(() =>  query !== '' ? db.productos.where('nombre').startsWithIgnoreCase(query).toArray() : db.productos.toArray(),[query])
 
     return (
         <>
@@ -24,6 +22,9 @@ const Products = () => {
                 <Container style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                     <Button onClick={() => setIsDialogOpen(true)} variant="contained">Añadir producto</Button>
                     <Button variant="contained">Cambiar tasa del dolar</Button>
+                </Container>
+                <Container style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop:'1rem' }}>
+                    <TextField placeholder="Buscar producto..." type="search" value={query} onChange={({target:{value}})=>setQuery(value)} variant="outlined" />
                 </Container>
                 <Container style={{marginTop:'1rem'}}>
                     <TableContainer component={Paper}>
