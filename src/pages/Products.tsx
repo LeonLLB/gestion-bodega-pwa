@@ -50,16 +50,17 @@ const Products = () => {
             <Container>
                 <Container style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                     <Button onClick={() => setDialogStatus({...dialogStatus,form:true})} variant="contained">Añadir producto</Button>
+                    <TextField placeholder="Buscar producto..." type="search" value={query} onChange={({target:{value}})=>setQuery(value)} variant="outlined" />
                     <Button onClick={() => setDialogStatus({...dialogStatus,tasa:true})} variant="contained">Cambiar tasa del dolar</Button>
                 </Container>
-                <Container style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop:'1rem' }}>
-                    <TextField placeholder="Buscar producto..." type="search" value={query} onChange={({target:{value}})=>setQuery(value)} variant="outlined" />
-                </Container>
-                <Container style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop:'1rem' }}>
+                <Container style={{ marginTop:'1rem',display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                     Tasa del dolar: {tasaDolar} Bs
+                    
+                    <Button onClick={() => null} variant="contained">Exportar Data</Button>
+                    <Button onClick={() => null} variant="contained">Importar Data</Button>
                 </Container>
                 <Container style={{marginTop:'1rem'}}>
-                    <TableContainer component={Paper}>
+                    <TableContainer style={{maxHeight:'20rem'}} component={Paper}>
                         <Table>
                             <TableBody>
                                 {(productos && productos.length >0 ) && productos.map(producto => (
@@ -86,9 +87,13 @@ const Products = () => {
                     </TableContainer>
                 </Container>
             </Container>
+            <Container style={{display:'flex',flexDirection:'column',alignItems:'center',marginTop:'.5rem'}}>
+                <span>Bodegón PWA v1.1</span>                
+            </Container>
             <ProductForm id={id} isOpen={dialogStatus.form} onClose={() => {setDialogStatus({...dialogStatus,form:false});setId(undefined);}} isEdit={!!id}></ProductForm>
             <ProductDelete id={id!} isOpen={dialogStatus.delete} onClose={() => {setDialogStatus({...dialogStatus,delete:false});setId(undefined);}}></ProductDelete>
             <TasaDolar emitSuccessChange={(tasa)=>setTasaDolar(tasa)} isOpen={dialogStatus.tasa} onClose={() => setDialogStatus({...dialogStatus,tasa:false})} ></TasaDolar>
+            
         </>
     )
 }

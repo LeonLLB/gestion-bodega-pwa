@@ -3,6 +3,8 @@ import { FormEvent, useState } from "react"
 import { db } from "../database/db"
 import { ProductCore } from "../database/products"
 import Alert from "./Alert"
+import useSnackbar from "../hooks/useSnackbar"
+import SimpleSnackbar from "./SimpleSnackbar"
 
 
 interface ProductDeleteProps {
@@ -18,18 +20,13 @@ const ProductDelete = ({
 }: ProductDeleteProps) => {
 
 
-    const defSnackbarState = {
-        message: '',
-        isOpen: false,
-        severity: undefined
-    }
-
-    const [snackbarData, setSnackbarData] = useState<{ message: string, isOpen: boolean, severity: AlertColor | undefined }>({ ...defSnackbarState })
+    
+    const {snackbarData, setSnackbarState, resetSnackbar} = useSnackbar()
 
     const handleDelete = () => {
         db.productos.delete(id)
             .then(() => {
-                setSnackbarData({
+                setSnackbarState({
                     message: 'El producto fue eliminado con exito',
                     isOpen: true,
                     severity: 'success'
@@ -37,7 +34,7 @@ const ProductDelete = ({
                 onClose()
             })
             .catch(() => {
-                setSnackbarData({
+                setSnackbarState({
                     message: 'No se pudo eliminar el producto',
                     isOpen: true,
                     severity: 'error'
@@ -59,11 +56,7 @@ const ProductDelete = ({
                     <Button onClick={onClose} autoFocus variant="contained">Cancelar</Button>
                 </DialogActions>                
             </Dialog>
-            <Snackbar open={snackbarData.isOpen} onClose={() => setSnackbarData({ ...defSnackbarState })} autoHideDuration={6000}>
-                <Alert severity={snackbarData.severity} sx={{ width: '100%' }}>
-                    {snackbarData.message}
-                </Alert>
-            </Snackbar>
+            <SimpleSnackbar snackbarData={snackbarData} resetSnackbar={resetSnackbar}/>
         </>
     )
 }

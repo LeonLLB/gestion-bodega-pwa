@@ -3,6 +3,8 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { db } from "../database/db"
 import { ProductCore } from "../database/products"
 import Alert from "./Alert"
+import useSnackbar from "../hooks/useSnackbar"
+import SimpleSnackbar from "./SimpleSnackbar"
 
 
 interface ProductFormProps {
@@ -26,14 +28,10 @@ const ProductForm = ({
         cantidadPorPaca: 0
     }
 
-    const defSnackbarState = {
-        message: '',
-        isOpen: false,
-        severity: undefined
-    }
+
 
     const [form, setForm] = useState<ProductCore>({ ...defFormState })
-    const [snackbarData, setSnackbarData] = useState<{ message: string, isOpen: boolean, severity: AlertColor | undefined }>({ ...defSnackbarState })
+    const {snackbarData, setSnackbarState, resetSnackbar} = useSnackbar()
 
     const onInputChange = ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
         if (name === 'nombre') {
@@ -68,7 +66,7 @@ const ProductForm = ({
             !form.cantidadPorPaca || form.cantidadPorPaca <= 0 ||
             !form.precioUnitario || form.precioUnitario <= 0
         ) {
-            setSnackbarData({
+            setSnackbarState({
                 isOpen: true,
                 message: 'Uno de los campos no es valido',
                 severity: 'error'
@@ -81,7 +79,7 @@ const ProductForm = ({
     const createProduct = () => {
         db.productos.add({ ...form })
         .then(() => {
-            setSnackbarData({
+            setSnackbarState({
                 isOpen: true,
                 message: 'Producto creado con exito',
                 severity: 'success'
@@ -90,7 +88,7 @@ const ProductForm = ({
         })
         .catch((err) => {
             console.log(err)
-            setSnackbarData({
+            setSnackbarState({
                 isOpen: true,
                 message: 'No se pudo crear el producto',
                 severity: 'error'
@@ -101,7 +99,7 @@ const ProductForm = ({
     const updateProduct = () => {
         db.productos.update(id!,{ ...form })
         .then(() => {
-            setSnackbarData({
+            setSnackbarState({
                 isOpen: true,
                 message: 'Producto actualizado con exito',
                 severity: 'success'
@@ -110,7 +108,7 @@ const ProductForm = ({
         })
         .catch((err) => {
             console.log(err)
-            setSnackbarData({
+            setSnackbarState({
                 isOpen: true,
                 message: 'No se pudo actualizar el producto',
                 severity: 'error'
@@ -154,11 +152,7 @@ const ProductForm = ({
                     <Button type="submit" variant="contained">{isEdit ? 'Actualizar producto' : 'Registrar producto'}</Button>
                 </form>
             </Dialog>
-            <Snackbar open={snackbarData.isOpen} onClose={() => setSnackbarData({ ...defSnackbarState })} autoHideDuration={6000}>
-                <Alert severity={snackbarData.severity} sx={{ width: '100%' }}>
-                    {snackbarData.message}
-                </Alert>
-            </Snackbar>
+            <SimpleSnackbar snackbarData={snackbarData} resetSnackbar={resetSnackbar}/>
         </>
     )
 }
