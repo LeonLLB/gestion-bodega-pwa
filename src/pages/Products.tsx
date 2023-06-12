@@ -20,7 +20,20 @@ const Products = () => {
 
     const [tasaDolar,setTasaDolar] = useState(+(localStorage.getItem('tasa') || 0))
 
-    const productos = useLiveQuery(() =>  query !== '' ? db.productos.where('nombre').startsWithIgnoreCase(query).toArray() : db.productos.toArray(),[query])
+    const productQuery = async () => {
+        
+        const dataOfProductos = await db.productos.toArray()
+
+        if (query === '') return dataOfProductos
+
+        const condition = new RegExp(query,'i')
+    
+        const filterProductos = dataOfProductos.filter((producto)=>condition.test(producto.nombre))
+        
+        return filterProductos
+    }
+
+    const productos = useLiveQuery(productQuery,[query])
 
     const beginProductUpdate = (idToSelect:number) => {
         setId(idToSelect)
