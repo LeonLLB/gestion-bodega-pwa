@@ -2937,6 +2937,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"file-saver@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "file-saver@npm:2.0.5"
+  checksum: c62d96e5cebc58b4bdf3ae8a60d5cf9607ad82f75f798c33a4ee63435ac2203002584d5256a2a780eda7feb5e19dc3b6351c2212e58b3f529e63d265a7cc79f7
+  languageName: node
+  linkType: hard
+
 "filelist@npm:^1.0.1":
   version: 1.0.4
   resolution: "filelist@npm:1.0.4"
@@ -3081,6 +3088,8 @@ __metadata:
     "@vitejs/plugin-react": ^3.0.0
     dexie: ^3.2.2
     dexie-react-hooks: ^1.1.1
+    file-saver: ^2.0.5
+    mui-file-input: ^2.0.0
     react: ^18.2.0
     react-dom: ^18.2.0
     typescript: ^4.9.3
@@ -3951,6 +3960,26 @@ __metadata:
   version: 2.1.3
   resolution: "ms@npm:2.1.3"
   checksum: aa92de608021b242401676e35cfa5aa42dd70cbdc082b916da7fb925c542173e36bce97ea3e804923fe92c0ad991434e4a38327e15a1b5b5f945d66df615ae6d
+  languageName: node
+  linkType: hard
+
+"mui-file-input@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "mui-file-input@npm:2.0.0"
+  dependencies:
+    pretty-bytes: ^6.0.0
+  peerDependencies:
+    "@emotion/react": ^11.5.0
+    "@emotion/styled": ^11.3.0
+    "@mui/icons-material": ^5.0.0
+    "@mui/material": ^5.0.0
+    "@types/react": ^18.0.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: e4536f6bd29b74eac65d4e241f920d861a2760d4319e8e10d5c8816399966c68c80f920c5a0c079bebc1d7e11f1359305ca4ef3f03027eb709de5c0413de064e
   languageName: node
   linkType: hard
 

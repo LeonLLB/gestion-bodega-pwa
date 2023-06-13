@@ -6,6 +6,7 @@ import ProductForm from "../components/ProductForm"
 import TasaDolar from "../components/TasaDolar"
 import { Delete, Edit } from "@mui/icons-material"
 import ProductDelete from "../components/ProductDelete"
+import ImportData from "../components/ImportData"
 
 const Products = () => {
 
@@ -15,7 +16,8 @@ const Products = () => {
     const [dialogStatus,setDialogStatus] = useState({
         form:false,
         tasa:false,
-        delete:false
+        delete:false,
+        import:false
     })
 
     const [tasaDolar,setTasaDolar] = useState(+(localStorage.getItem('tasa') || 0))
@@ -56,7 +58,7 @@ const Products = () => {
                 <Container style={{ marginTop:'1rem',display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                     Tasa del dolar: {tasaDolar} Bs
                     
-                    <Button onClick={() => null} variant="contained">Exportar Data</Button>
+                    <Button onClick={() => setDialogStatus({...dialogStatus,import:true})} variant="contained">Exportar Data</Button>
                     <Button onClick={() => null} variant="contained">Importar Data</Button>
                 </Container>
                 <Container style={{marginTop:'1rem'}}>
@@ -93,7 +95,7 @@ const Products = () => {
             <ProductForm id={id} isOpen={dialogStatus.form} onClose={() => {setDialogStatus({...dialogStatus,form:false});setId(undefined);}} isEdit={!!id}></ProductForm>
             <ProductDelete id={id!} isOpen={dialogStatus.delete} onClose={() => {setDialogStatus({...dialogStatus,delete:false});setId(undefined);}}></ProductDelete>
             <TasaDolar emitSuccessChange={(tasa)=>setTasaDolar(tasa)} isOpen={dialogStatus.tasa} onClose={() => setDialogStatus({...dialogStatus,tasa:false})} ></TasaDolar>
-            
+            <ImportData isOpen={dialogStatus.import} onClose={()=>setDialogStatus({...dialogStatus,import:false})}/>
         </>
     )
 }
