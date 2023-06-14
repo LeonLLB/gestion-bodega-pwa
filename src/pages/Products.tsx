@@ -1,12 +1,15 @@
 import { Button, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import { useLiveQuery } from "dexie-react-hooks"
-import { useEffect, useState } from "react"
+import {  useState } from "react"
+import {saveAs} from 'file-saver'
 import { db } from "../database/db"
 import ProductForm from "../components/ProductForm"
 import TasaDolar from "../components/TasaDolar"
 import { Delete, Edit } from "@mui/icons-material"
 import ProductDelete from "../components/ProductDelete"
 import ImportData from "../components/ImportData"
+import useSnackbar from "../hooks/useSnackbar"
+import SimpleSnackbar from "../components/SimpleSnackbar"
 
 const Products = () => {
 
@@ -21,6 +24,8 @@ const Products = () => {
     })
 
     const [tasaDolar,setTasaDolar] = useState(+(localStorage.getItem('tasa') || 0))
+
+    const {snackbarData,setSnackbarState,resetSnackbar} = useSnackbar()
 
     const productQuery = async () => {
         
@@ -47,6 +52,45 @@ const Products = () => {
         setDialogStatus({...dialogStatus,delete:true})
     }
 
+    const generateBackup = async () => {
+        setSnackbarState({
+            isOpen:true,
+            message:'Generando respaldo de datos...',
+            severity: 'info'
+        })
+
+        const data = await db.productos.toArray()
+
+        const res = await fetch('https://csv-parser-api.onrender.com/export',{
+            method:'POST',
+            body:JSON.stringify(data),
+            headers:{
+                "Content-Type":"application/json"
+            }
+        })
+
+        if(res.status >= 202){
+            return setSnackbarState({
+                isOpen:true,
+                message:'No se pudo generar el respaldo de los datos',
+                severity:'error'
+            })
+        }
+
+        const blob = await res.blob()
+
+        const date = new Date()
+        const randomNumber = Math.random() * 100;
+
+        setSnackbarState({
+            isOpen:true,
+            message:'CSV generado con exito!',
+            severity:'success'
+        })
+
+        saveAs(blob,`Bodegon-Respaldo-${date.getDate()}${date.getMonth()+1}${date.getFullYear()}-${date.getHours()}${date.getMinutes()}${date.getSeconds()}-${randomNumber.toFixed(0)}`)
+    }
+
     return (
         <>
             <Container>
@@ -59,7 +103,7 @@ const Products = () => {
                     Tasa del dolar: {tasaDolar} Bs
                     
                     <Button onClick={() => setDialogStatus({...dialogStatus,import:true})} variant="contained">Exportar Data</Button>
-                    <Button onClick={() => null} variant="contained">Importar Data</Button>
+                    <Button onClick={() => generateBackup()} variant="contained">Importar Data</Button>
                 </Container>
                 <Container style={{marginTop:'1rem'}}>
                     <TableContainer style={{maxHeight:'20rem'}} component={Paper}>
@@ -96,6 +140,7 @@ const Products = () => {
             <ProductDelete id={id!} isOpen={dialogStatus.delete} onClose={() => {setDialogStatus({...dialogStatus,delete:false});setId(undefined);}}></ProductDelete>
             <TasaDolar emitSuccessChange={(tasa)=>setTasaDolar(tasa)} isOpen={dialogStatus.tasa} onClose={() => setDialogStatus({...dialogStatus,tasa:false})} ></TasaDolar>
             <ImportData isOpen={dialogStatus.import} onClose={()=>setDialogStatus({...dialogStatus,import:false})}/>
+            <SimpleSnackbar resetSnackbar={resetSnackbar} snackbarData={snackbarData}/>
         </>
     )
 }

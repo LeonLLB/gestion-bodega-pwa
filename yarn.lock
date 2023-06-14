@@ -2059,6 +2059,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/file-saver@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "@types/file-saver@npm:2.0.5"
+  checksum: a31d6ee2abf99598647139f8f35b37b6e1bacf6c7ddf05c66651b9b0e6e53381aa0e8ed13f37faa6e496e0eb1da87c97e6c70fd589d5b83b0c95c57cb64ce92a
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*":
   version: 18.11.18
   resolution: "@types/node@npm:18.11.18"
@@ -3083,6 +3090,7 @@ __metadata:
     "@fontsource/roboto": ^4.5.8
     "@mui/icons-material": ^5.11.0
     "@mui/material": ^5.11.4
+    "@types/file-saver": ^2.0.5
     "@types/react": ^18.0.26
     "@types/react-dom": ^18.0.9
     "@vitejs/plugin-react": ^3.0.0
